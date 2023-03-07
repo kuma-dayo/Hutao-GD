@@ -1,6 +1,7 @@
 import luaparse from "luaparse"
 import { waitTick } from "./asyncWait"
 import { GadgetStateEnum } from "$DT/Enum/GadgetState"
+import { EventTypeEnum } from "$DT/Enum/EventType"
 
 function isLuaArray(obj: any): boolean {
   const keys = Object.keys(obj || {})
@@ -396,6 +397,8 @@ function parseLuaObj(obj: LuaObject, vars: VariableManager, identifierAsKey = fa
       const baseVarObj = vars.get(parseLuaObj((<LuaMemberExpression | LuaIndexExpression>obj).base, vars, true))
       if (baseVarObj == null && (<LuaMemberExpression | LuaIndexExpression>obj).base["name"] == "GadgetState")
         return GadgetStateEnum[obj["identifier"].name]
+      if (baseVarObj == null && (<LuaMemberExpression | LuaIndexExpression>obj).base["name"] == "EventType")
+        return EventTypeEnum[obj["identifier"].name]
       if (baseVarObj == null) return
 
       return baseVarObj.getMember(
