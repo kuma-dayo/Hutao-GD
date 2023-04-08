@@ -16,6 +16,7 @@ import TalentData from "./OutputData/TalentData"
 import WeaponData from "./OutputData/WeaponData"
 import WeatherData from "./OutputData/WeatherData"
 import WorldData from "./OutputData/WorldData"
+import QuestData from "./OutputData/QuestData"
 
 export default async function convertFile(ver: string) {
   const filter = parseInt(process.argv.find((arg) => arg.indexOf("-filter:") === 0)?.split(":")[1])
@@ -42,6 +43,7 @@ export default async function convertFile(ver: string) {
     MapAreaData,
     MaterialData,
     MonsterData,
+    QuestData,
     ReliquaryData,
     SceneData,
     ShopData,
