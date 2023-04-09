@@ -33,6 +33,7 @@ export class QuestDataWriter extends Writer {
         Series: questData?.Series,
         ChapterId: questData?.ChapterId,
         Type: questData?.Type,
+        Talks: questData?.Talks,
         SubQuests: questData?.SubQuests,
       })
     }
