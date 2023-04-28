@@ -1,8 +1,10 @@
+import ConfigMonster from "#/BinOutput/ConfigMonster"
 import MonsterAffixExcelConfig from "#/ExcelBinOutput/MonsterAffixExcelConfig"
 import MonsterDescribeExcelConfig from "#/ExcelBinOutput/MonsterDescribeExcelConfig"
 import MonsterExcelConfig from "#/ExcelBinOutput/MonsterExcelConfig"
 import MonsterMultiPlayerExcelConfig from "#/ExcelBinOutput/MonsterMultiPlayerExcelConfig"
 import MonsterSpecialNameExcelConfig from "#/ExcelBinOutput/MonsterSpecialNameExcelConfig"
+import Monster from "#/Text/Monster"
 import MonsterDataList from "$DT/MonsterData"
 import Writer from "./writer"
 
@@ -24,18 +26,24 @@ export class MonsterDataWriter extends Writer {
 
     const { data, version } = this
 
+    const monsterTxtLoader = Monster(version)
+    const configMonsterLoader = ConfigMonster(version)
     const monsterAffixExcelConfigLoader = MonsterAffixExcelConfig(version)
     const monsterDescribeExcelConfigLoader = MonsterDescribeExcelConfig(version)
     const monsterExcelConfigLoader = MonsterExcelConfig(version)
     const monsterMultiPlayerExcelConfigLoader = MonsterMultiPlayerExcelConfig(version)
     const monsterSpecialNameExcelConfigLoader = MonsterSpecialNameExcelConfig(version)
 
+    await monsterTxtLoader.load()
+    await configMonsterLoader.loadDir()
     await monsterAffixExcelConfigLoader.load()
     await monsterDescribeExcelConfigLoader.load()
     await monsterExcelConfigLoader.load()
     await monsterMultiPlayerExcelConfigLoader.load()
     await monsterSpecialNameExcelConfigLoader.load()
 
+    const { data: monsterTxt } = monsterTxtLoader
+    const { data: configMonster } = configMonsterLoader
     const { data: monsterAffixExcelConfig } = monsterAffixExcelConfigLoader
     const { data: monsterDescribeExcelConfig } = monsterDescribeExcelConfigLoader
     const { data: monsterExcelConfig } = monsterExcelConfigLoader
@@ -129,6 +137,11 @@ export class MonsterDataWriter extends Writer {
         VisionLevel,
       } = monster
 
+      const combatConfig = monsterTxt
+        .find((m) => parseInt(m.Id) === Id)
+        ?.CombatConfig?.replace(/^Config(Animal|Monster).*?_/, "")
+      const monsterConfig = configMonster[combatConfig] || configMonster[MonsterName]
+
       data.Monster.push({
         Name: MonsterName,
         Type,
@@ -152,6 +165,7 @@ export class MonsterDataWriter extends Writer {
         ControllerPathHashPre,
         ControllerPathRemoteHashSuffix,
         ControllerPathRemoteHashPre,
+        Config: monsterConfig,
         IsInvisibleReset: !!IsInvisibleReset,
         IsAIHashCheck: !!IsAIHashCheck,
         SafetyCheck: !!SafetyCheck,
