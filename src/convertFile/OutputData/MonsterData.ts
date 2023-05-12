@@ -148,7 +148,7 @@ export class MonsterDataWriter extends Writer {
         configMonster[MonsterName] ||
         configMonster[MonsterName.replace(/^(Animal|Monster).*?_/, "")] ||
         configMonster[BossName] ||
-        configMonster[getPathHash(`Data/_BinOutput/Monster/Config${MonsterName}.MiHoYoBinData`).slice(0, 8)]
+        configMonster[getPathHash(`Data/_BinOutput/Monster/Config${MonsterName}.MiHoYoBinData`)]
 
       data.Monster.push({
         Name: MonsterName,
