@@ -23,6 +23,7 @@ export class DungeonDataWriter extends Writer {
       Entry: [],
       MapArea: [],
       Roster: [],
+      Challenge: [],
     }
 
     const { data, version } = this
@@ -57,6 +58,37 @@ export class DungeonDataWriter extends Writer {
     const { data: dungeonMapAreaExcelConfig } = dungeonMapAreaExcelConfigLoader
     const { data: dungeonRosterConfig } = dungeonRosterConfigLoader
 
+    for (const challenge of dungeonChallengeConfig) {
+      const {
+        Id,
+        ChallengeType,
+        NoSuccessHint,
+        NoFailHint,
+        IsBlockTopTimer,
+        IsSuccessWhenNotSettled,
+        InterruptButtonType,
+        SubChallengeFadeOutRule,
+        SubChallengeFadeOutDelayTime,
+        SubChallengeBannerRule,
+        RecordType,
+        ActivitySkillID,
+      } = challenge
+
+      this.data.Challenge.push({
+        Id,
+        ChallengeType,
+        NoSuccessHint,
+        NoFailHint,
+        IsBlockTopTimer,
+        IsSuccessWhenNotSettled,
+        InterruptButtonType,
+        SubChallengeFadeOutRule,
+        SubChallengeFadeOutDelayTime,
+        SubChallengeBannerRule,
+        RecordType,
+        ActivitySkillID,
+      })
+    }
     for (const dungeon of dungeonExcelConfig) {
       const {
         Id,
@@ -143,6 +175,7 @@ export class DungeonDataWriter extends Writer {
 
         Challenge: challenge
           ? {
+              Id: challenge.Id,
               ChallengeType: challenge.ChallengeType,
               NoSuccessHint: challenge.NoSuccessHint,
               NoFailHint: !!challenge.NoFailHint,
